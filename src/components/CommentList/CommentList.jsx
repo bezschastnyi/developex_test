@@ -61,7 +61,7 @@ function CommentList(props) {
     return (
         <div>
             <h3>Comments</h3>
-            <Button variant="primary" onClick={handleShowForm}>Відповести</Button>
+            <Button variant="primary" onClick={handleShowForm}>Answer</Button>
             <div>
                 {filteredComments.map((comment) => (
                     <CommentForm key={comment.body}
@@ -103,7 +103,7 @@ function CommentList(props) {
                             <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
-                                placeholder="Введить ваш email"
+                                placeholder="Enter email"
                                 value={newEmail}
                                 onChange={(e) => setNewEmail(e.target.value)}
                             />

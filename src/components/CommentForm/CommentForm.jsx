@@ -43,7 +43,7 @@ const CommentForm = ({ comment, onDeleteComment }) => {
                 <Card.Subtitle className="mb-2 text-muted">{editedEmail}</Card.Subtitle>
                 <Card.Text>{editedBody}</Card.Text>
                 <Button variant="primary" onClick={handleEdit}>
-                    Редактировать
+                    Edit
                 </Button>
                 <Button variant="danger" className="ml-2" onClick={handleDelete}>
                     Remove

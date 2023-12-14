@@ -32,7 +32,7 @@ function PostList() {
             const updatedPost = fillPosts.filter((post) => post.id !== postId);
             dispatch(updatePosts(updatedPost));
         } catch (error) {
-            console.error('Ошибка при удалении поста:', error);
+            console.error('Error deleting a post:', error);
         }
     };
 
@@ -75,7 +75,7 @@ function PostList() {
             setNewPostBody('');
             handleCloseModal();
         } catch (error) {
-            console.error('Помилка при створенні нового посту:', error);
+            console.error('Error creating a new post:', error);
         }
     };
 
@@ -85,35 +85,35 @@ function PostList() {
                 <input
                     type="text"
                     className="form-control"
-                    placeholder="Поиск..."
+                    placeholder="Search..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <Button variant="primary" onClick={handleShowModal}>
-                    Новий пост
+                    New post
                 </Button>
             </div>
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Новий пост</Modal.Title>
+                    <Modal.Title>New post</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group controlId="formNewPostTitle">
-                            <Form.Label>Заголовок нового посту</Form.Label>
+                            <Form.Label>New post title</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Введіть заголовок"
+                                placeholder="Enter a title"
                                 value={newPostTitle}
                                 onChange={(e) => setNewPostTitle(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group controlId="formNewPostBody">
-                            <Form.Label>Текст нового посту</Form.Label>
+                            <Form.Label>Neq post text</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}
-                                placeholder="Введіть текст"
+                                placeholder="Enter text"
                                 value={newPostBody}
                                 onChange={(e) => setNewPostBody(e.target.value)}
                             />
@@ -122,14 +122,14 @@ function PostList() {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
-                        Закрити
+                        Close
                     </Button>
                     <Button variant="primary" onClick={handleSavePost}>
-                        Зберегти
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <h2>Посты</h2>
+            <h2>Posts</h2>
             <ul className="list-group">
                 {filteredPosts.map((post) => (
                     <li key={post.id} className="list-group-item">

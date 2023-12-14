@@ -12,7 +12,6 @@ const CommentForm = ({ comment, onDeleteComment }) => {
         setShowEditModal(true);
     };
 
-
     const handleDelete = () => {
         onDeleteComment();
     };
@@ -33,7 +32,7 @@ const CommentForm = ({ comment, onDeleteComment }) => {
 
             setShowEditModal(false);
         } catch (error) {
-            console.error('Помилка при редагуванні поста:', error);
+            console.error('An error occurred while editing the post:', error);
         }
     };
 
@@ -47,41 +46,41 @@ const CommentForm = ({ comment, onDeleteComment }) => {
                     Редактировать
                 </Button>
                 <Button variant="danger" className="ml-2" onClick={handleDelete}>
-                    Удалить
+                    Remove
                 </Button>
             </Card.Body>
 
-            {/* Редагування коментаря */}
+            {/* Editing a comment */}
             <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Редагування коментаря</Modal.Title>
+                    <Modal.Title>Editing a comment</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group controlId="formEditCommentName">
-                            <Form.Label>Имя</Form.Label>
+                            <Form.Label>Name</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Введите имя"
+                                placeholder="Enter the name"
                                 value={editedName}
                                 onChange={(e) => setEditedName(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group controlId="formEditCommentEmail">
-                            <Form.Label>Електронна пошта</Form.Label>
+                            <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
-                                placeholder="Введить електронну пошту"
+                                placeholder="Enter email"
                                 value={editedEmail}
                                 onChange={(e) => setEditedEmail(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group controlId="formEditCommentBody">
-                            <Form.Label>Текст комментаря</Form.Label>
+                            <Form.Label>Comment text</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}
-                                placeholder="Введить текст"
+                                placeholder="Enter text"
                                 value={editedBody}
                                 onChange={(e) => setEditedBody(e.target.value)}
                             />
@@ -90,10 +89,10 @@ const CommentForm = ({ comment, onDeleteComment }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-                        Відміна
+                        Cancel
                     </Button>
                     <Button variant="primary" onClick={handleSaveEdit}>
-                        Зберегти
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>

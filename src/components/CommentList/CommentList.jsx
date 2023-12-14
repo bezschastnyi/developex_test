@@ -24,7 +24,7 @@ function CommentList(props) {
             const updatedComment = fillComments.filter((comment) => comment.id !== id);
             dispatch(updateComments(updatedComment));
         } catch (error) {
-            console.error('Помилка при видаленні посту:', error);
+            console.error('Error deleting post:', error);
         }
     };
 
@@ -52,7 +52,7 @@ function CommentList(props) {
             setNewName('');
             handleCloseForm()
         } catch (error) {
-            console.error('Помилка при збереження нового посту:', error);
+            console.error('Error saving a new post:', error);
         }
     };
 
@@ -73,28 +73,28 @@ function CommentList(props) {
                 ))}
             </div>
 
-            {/* новий комментар */}
+            {/* new comment */}
             <Modal show={showForm} onHide={handleCloseForm}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Новий комментар</Modal.Title>
+                    <Modal.Title>New comment</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group controlId="formCommentTitle">
-                            <Form.Label>Назва</Form.Label>
+                            <Form.Label>Name</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Введить назву коментаря"
+                                placeholder="Enter the name of the comment"
                                 value={newName}
                                 onChange={(e) => setNewName(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group controlId="formCommentBody">
-                            <Form.Label>Тіло комментаря</Form.Label>
+                            <Form.Label>Comment body</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}
-                                placeholder="Введить текст коментаря"
+                                placeholder="Enter comment text"
                                 value={newBody}
                                 onChange={(e) => setNewBody(e.target.value)}
                             />
@@ -112,10 +112,10 @@ function CommentList(props) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={props.onCancel}>
-                        Отмена
+                        Cancel
                     </Button>
                     <Button variant="primary" onClick={handleSaveComment}>
-                        Сохранить
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>

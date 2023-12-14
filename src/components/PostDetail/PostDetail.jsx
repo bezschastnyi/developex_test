@@ -29,7 +29,7 @@ function PostDetail({searchTerm, item, comments, onDeletePost}) {
             setShowDeleteModal(false);
             onDeletePost();
         } catch (error) {
-            console.error('Помилка при видаленні посту:', error);
+            console.error('Error deleting post:', error);
         }
     };
 
@@ -47,7 +47,7 @@ function PostDetail({searchTerm, item, comments, onDeletePost}) {
 
             setShowEditModal(false);
         } catch (error) {
-            console.error('Помилка при редагуванні посту:', error);
+            console.error('Error editing the post:', error);
         }
     };
 
@@ -59,13 +59,13 @@ function PostDetail({searchTerm, item, comments, onDeletePost}) {
             </div>
             <div className="card-footer d-flex justify-content-between">
                 <button className="btn btn-primary mr-2" onClick={handleEdit}>
-                    Редагувати
+                    Edit
                 </button>
                 <button className="btn btn-danger mr-2" onClick={handleDelete}>
-                    Видалити
+                    Delete
                 </button>
                 <button className="btn btn-success" onClick={toggleComments}>
-                    {showComments ? 'Сховати комментарі' : 'Показати комментарі'}
+                    {showComments ? 'Hide comments' : 'Show comments'}
                 </button>
             </div>
             {showComments && (
@@ -76,25 +76,25 @@ function PostDetail({searchTerm, item, comments, onDeletePost}) {
 
             <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Редактирование поста</Modal.Title>
+                    <Modal.Title>Post editing</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group controlId="formEditPostTitle">
-                            <Form.Label>Заголовок поста</Form.Label>
+                            <Form.Label>Post title</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Введіть заголовок"
+                                placeholder="Enter a title"
                                 value={editedPostTitle}
                                 onChange={(e) => setEditedPostTitle(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group controlId="formEditPostBody">
-                            <Form.Label>Текст поста</Form.Label>
+                            <Form.Label>Post text</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}
-                                placeholder="Введіть текст"
+                                placeholder="Enter text"
                                 value={editedPostBody}
                                 onChange={(e) => setEditedPostBody(e.target.value)}
                             />
@@ -103,26 +103,26 @@ function PostDetail({searchTerm, item, comments, onDeletePost}) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-                        Отмена
+                        Cancel
                     </Button>
                     <Button variant="primary" onClick={handleEditPost}>
-                        Сохранить
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>
 
-            {/* Підтвердження видалення */}
+            {/* Delete confirmation */}
             <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Видалення посту</Modal.Title>
+                    <Modal.Title>Deleting a post</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Ви впевнені, що хочите видалити цей пост?</Modal.Body>
+                <Modal.Body>Are you sure you want to delete this post?</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-                        Відміна
+                        Cancel
                     </Button>
                     <Button variant="danger" onClick={handleDeletePost}>
-                        Видалити
+                        Delete
                     </Button>
                 </Modal.Footer>
             </Modal>

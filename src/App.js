@@ -1,20 +1,16 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import PostList from './components/PostList/PostList';
-import {getPosts} from "./redux/actions/posts";
-import {getComments} from "./redux/actions/comments";
-import {useDispatch} from "react-redux";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './Localization/i18n';
 
 function App() {
 
-    const dispatch=useDispatch()
 
-    useEffect(() => {
-        dispatch(getPosts());
-        dispatch(getComments())
-    }, []);
     return (
         <>
             <PostList />
+            <ToastContainer />
         </>
     );
 }

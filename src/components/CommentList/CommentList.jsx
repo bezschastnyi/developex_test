@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, {useState, useTransition} from 'react';
 import CommentForm from "../CommentForm/CommentForm";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
-import axios from "axios";
 import {updateComments} from "../../redux/actions/updateComments";
-
+import ModalComment from "../Modal/ModalComment/ModalComment";
+import useApi from "../../hooks/useApi";
+import {toast} from "react-toastify";
+import {useTranslation} from "react-i18next";
 function CommentList(props) {
     const dispatch = useDispatch()
     const [showForm, setShowForm] = useState(false);
-
     const [newBody, setNewBody] = useState('')
     const [newEmail, setNewEmail] = useState('')
-
     const [newName, setNewName] = useState('')
+    const api = useApi()
+    const { t } = useTranslation();
     let fillComments = useSelector((state) => state.comments)
 
     const handleShowForm = () => setShowForm(true);
@@ -20,9 +22,10 @@ function CommentList(props) {
 
     const handleDeleteComment = async (id) => {
         try {
-            await axios.delete(`https://jsonplaceholder.typicode.com/comments/${id}`);
+            await api.removeComment(id);
             const updatedComment = fillComments.filter((comment) => comment.id !== id);
             dispatch(updateComments(updatedComment));
+
         } catch (error) {
             console.error('Error deleting post:', error);
         }
@@ -30,7 +33,7 @@ function CommentList(props) {
 
     const handleSaveComment = async () => {
         try {
-            const response = await axios.post('https://jsonplaceholder.typicode.com/comments', {
+            const response = await api.newComment( {
                 postId: props.postId,
                 name: newName,
                 body: newBody,
@@ -41,16 +44,17 @@ function CommentList(props) {
             const newComment = {
                 postId: props.postId,
                 id: fillComments.length + 1,
-                name: response.data.name,
-                body: response.data.body,
-                email: response.data.email,
+                name: response.name,
+                body: response.body,
+                email: response.email,
             };
             const commentNew = [newComment, ...fillComments];
             dispatch(updateComments(commentNew));
-            setNewBody('');
-            setNewEmail('');
-            setNewName('');
             handleCloseForm()
+            toast.success('Complete', {
+                position: 'bottom-left',
+                autoClose: 1000,
+            })
         } catch (error) {
             console.error('Error saving a new post:', error);
         }
@@ -58,10 +62,12 @@ function CommentList(props) {
 
     const filteredComments = fillComments.filter(comment => comment.postId === props.postId);
 
+
+
     return (
         <div>
             <h3>Comments</h3>
-            <Button variant="primary" onClick={handleShowForm}>Answer</Button>
+            <Button variant="primary" onClick={handleShowForm}>{t('Answer')}</Button>
             <div>
                 {filteredComments.map((comment) => (
                     <CommentForm key={comment.body}
@@ -74,51 +80,24 @@ function CommentList(props) {
             </div>
 
             {/* new comment */}
-            <Modal show={showForm} onHide={handleCloseForm}>
-                <Modal.Header closeButton>
-                    <Modal.Title>New comment</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formCommentTitle">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter the name of the comment"
-                                value={newName}
-                                onChange={(e) => setNewName(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formCommentBody">
-                            <Form.Label>Comment body</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                placeholder="Enter comment text"
-                                value={newBody}
-                                onChange={(e) => setNewBody(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formCommentEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Enter email"
-                                value={newEmail}
-                                onChange={(e) => setNewEmail(e.target.value)}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={props.onCancel}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={handleSaveComment}>
-                        Save
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ModalComment
+                show={showForm}
+                onHide={() => {setShowForm(false)
+                    setNewBody('');
+                    setNewEmail('');
+                    setNewName('');}}
+                title={t('New Comment')}
+                onSave={handleSaveComment}
+                labelName={t('NameComment')}
+                labelBody={t('Comment Body')}
+                labelEmail={t('Email')}
+                valueName={newName}
+                onChangeName={setNewName}
+                valueBody={newBody}
+                onChangeBody={setNewBody}
+                valueEmail={newEmail}
+                onChangeEmail={setNewEmail}
+            />
         </div>
     );
 }

@@ -1,36 +1,61 @@
 import React, { useState } from 'react';
-import { Card, Button, Modal, Form } from 'react-bootstrap';
-import axios from "axios";
+import { Card, Button } from 'react-bootstrap';
+import ModalComment from "../Modal/ModalComment/ModalComment";
+import useApi from "../../hooks/useApi";
+import ModalConfirmation from "../Modal/ModalConfirmation/ModalConfirmation";
+import {toast} from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 const CommentForm = ({ comment, onDeleteComment }) => {
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editedName, setEditedName] = useState(comment.name);
     const [editedEmail, setEditedEmail] = useState(comment.email);
     const [editedBody, setEditedBody] = useState(comment.body);
+    const [tempEditedName, setTempEditedName] = useState(comment.name);
+    const [tempEditedEmail, setTempEditedEmail] = useState(comment.email);
+    const [tempEditedBody, setTempEditedBody] = useState(comment.body);
+
+    const api = useApi()
+    const { t } = useTranslation();
 
     const handleEdit = () => {
+        setTempEditedName(editedName);
+        setTempEditedEmail(editedEmail);
+        setTempEditedBody(editedBody);
         setShowEditModal(true);
+    };
+
+    const handleDeleteModal = () => {
+        setShowDeleteModal(true)
     };
 
     const handleDelete = () => {
         onDeleteComment();
+        toast.success('Complete', {
+            position: 'bottom-left',
+            autoClose: 1000,
+        })
     };
 
-    const handleSaveEdit = async () => {
+    const handleSaveEdit = async (id) => {
         try {
-            await axios.put(`https://jsonplaceholder.typicode.com/comments/${comment.id}`, {
+            await api.editComment( {
                 postId: comment.postId,
-                name: editedName,
-                body: editedBody,
+                name: tempEditedName,
+                body: tempEditedBody,
                 id: comment.id,
-                email: editedEmail
+                email: tempEditedEmail
             });
 
-            comment.name = editedName;
-            comment.body = editedBody;
-            comment.email = editedEmail;
-
+            setEditedName(tempEditedName);
+            setEditedBody(tempEditedBody);
+            setEditedEmail(tempEditedEmail);
             setShowEditModal(false);
+            toast.success('Complete', {
+                position: 'bottom-left',
+                autoClose: 1000,
+            })
         } catch (error) {
             console.error('An error occurred while editing the post:', error);
         }
@@ -43,59 +68,38 @@ const CommentForm = ({ comment, onDeleteComment }) => {
                 <Card.Subtitle className="mb-2 text-muted">{editedEmail}</Card.Subtitle>
                 <Card.Text>{editedBody}</Card.Text>
                 <Button variant="primary" onClick={handleEdit}>
-                    Edit
+                    {t('Edit')}
                 </Button>
-                <Button variant="danger" className="ml-2" onClick={handleDelete}>
-                    Remove
+                <Button variant="danger" className="ml-2" onClick={handleDeleteModal}>
+                    {t('Delete')}
                 </Button>
             </Card.Body>
 
-            {/* Editing a comment */}
-            <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Editing a comment</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formEditCommentName">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter the name"
-                                value={editedName}
-                                onChange={(e) => setEditedName(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formEditCommentEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Enter email"
-                                value={editedEmail}
-                                onChange={(e) => setEditedEmail(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formEditCommentBody">
-                            <Form.Label>Comment text</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                placeholder="Enter text"
-                                value={editedBody}
-                                onChange={(e) => setEditedBody(e.target.value)}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={handleSaveEdit}>
-                        Save
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            {/* Edit comment */}
+            <ModalComment
+                show={showEditModal}
+                onHide={() => setShowEditModal(false)}
+                title={t('Edit comment')}
+                onSave={handleSaveEdit}
+                labelName={t('Name')}
+                labelBody={t('Comment text')}
+                labelEmail={t('Email')}
+                valueName={tempEditedName}
+                onChangeName={setTempEditedName}
+                valueBody={tempEditedBody}
+                onChangeBody={setTempEditedBody}
+                valueEmail={tempEditedEmail}
+                onChangeEmail={setTempEditedEmail}
+            />
+
+            {/* Delete confirmation */}
+            <ModalConfirmation
+                title={t('Deleting a comment')}
+                body={t('Are you sure you want to delete this comment?')}
+                show={showDeleteModal}
+                onCancel={() => setShowDeleteModal(false)}
+                onDelete={handleDelete}
+            />
         </Card>
     );
 };

@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Modal, Button, Form } from 'react-bootstrap';
+import React, {useEffect, useState} from 'react';
+import { Button } from 'react-bootstrap';
 import PostDetail from '../PostDetail/PostDetail';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useDispatch, useSelector} from "react-redux";
 import {updatePosts} from "../../redux/actions/updatePosts";
+import {getAllPosts} from "../../redux/actions/posts";
+import {getComments} from "../../redux/actions/comments";
+import ModalPost from "../Modal/ModalPost/ModalPost";
+import useApi from "../../hooks/useApi";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function PostList() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,8 +17,19 @@ function PostList() {
     const [newPostBody, setNewPostBody] = useState('');
     const [showModal, setShowModal] = useState(false);
 
+    const api = useApi()
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        api.getPosts().then((data) =>
+        dispatch(getAllPosts(data)))
+
+        api.getAllComments().then((data) =>
+            dispatch(getComments(data)))
+
+    }, []);
+
     let fillPosts = useSelector((state) => state.posts)
     let fillComments = useSelector((state) => state.comments)
 
@@ -28,7 +44,7 @@ function PostList() {
 
     const handleDeletePost = async (postId) => {
         try {
-            await axios.delete(`https://jsonplaceholder.typicode.com/posts/${postId}`);
+            await api.removePost(postId)
             const updatedPost = fillPosts.filter((post) => post.id !== postId);
             dispatch(updatePosts(updatedPost));
         } catch (error) {
@@ -57,16 +73,14 @@ function PostList() {
 
     const handleSavePost = async () => {
         try {
-            const response = await axios.post('https://jsonplaceholder.typicode.com/posts', {
+            const response = await api.newPost({
                 title: newPostTitle,
                 body: newPostBody,
-                userId: 1,
             });
-
             const newPost = {
                 id: fillPosts.length + 1,
-                title: response.data.title,
-                body: response.data.body,
+                title: response.title,
+                body: response.body,
                 comments: [],
             };
             const postNew = [newPost, ...fillPosts];
@@ -74,6 +88,10 @@ function PostList() {
             setNewPostTitle('');
             setNewPostBody('');
             handleCloseModal();
+            toast.success('Complete', {
+                position: 'bottom-left',
+                autoClose: 1000,
+            })
         } catch (error) {
             console.error('Error creating a new post:', error);
         }
@@ -93,47 +111,26 @@ function PostList() {
                     New post
                 </Button>
             </div>
-            <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>New post</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formNewPostTitle">
-                            <Form.Label>New post title</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter a title"
-                                value={newPostTitle}
-                                onChange={(e) => setNewPostTitle(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formNewPostBody">
-                            <Form.Label>Neq post text</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                placeholder="Enter text"
-                                value={newPostBody}
-                                onChange={(e) => setNewPostBody(e.target.value)}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleSavePost}>
-                        Save
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+
+            <ModalPost
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                title="New Post"
+                onSave={handleSavePost}
+                labelTitle="New Post Title"
+                labelBody="New Post Text"
+                valueTitle={newPostTitle}
+                onChangeTitle={setNewPostTitle}
+                valueBody={newPostBody}
+                onChangeBody={setNewPostBody}
+            />
+
             <h2>Posts</h2>
             <ul className="list-group">
                 {filteredPosts.map((post) => (
-                    <li key={post.id} className="list-group-item">
+                    <li className="list-group-item">
                         <PostDetail
+                            key={post.id}
                             searchTerm={searchTerm}
                             // comments={comments}
                             item={post}

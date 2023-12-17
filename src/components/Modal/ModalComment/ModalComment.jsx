@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
+import {useTranslation} from "react-i18next";
 
 const ModalComment = ({
                           show,
@@ -36,6 +37,8 @@ const ModalComment = ({
 
     });
 
+    const { t } = useTranslation()
+
     const handleValidation = async () => {
         try {
             await schema.validate({
@@ -45,7 +48,7 @@ const ModalComment = ({
 
             });
             setValidationErrors({ name: '', body: '', email: '' });
-            return true; // Валидация прошла успешно
+            return true;
         } catch (error) {
             const errors = {
                 name: error.path === 'name' ? error.message : '',
@@ -54,7 +57,7 @@ const ModalComment = ({
 
             };
             setValidationErrors(errors);
-            return false; // Есть ошибки валидации
+            return false;
         }
     };
 
@@ -79,7 +82,7 @@ const ModalComment = ({
                             placeholder={`Enter ${labelName?.toLowerCase()}`}
                             value={valueName}
                             onChange={(e) => onChangeName(e.target.value)}
-                            isInvalid={!!validationErrors.name} // Устанавливаем, если есть ошибка
+                            isInvalid={!!validationErrors.name}
                         />
                         <Form.Control.Feedback type="invalid" style={{ display: validationErrors.name ? 'block' : 'none' }}>
                             {validationErrors.name}
@@ -93,7 +96,7 @@ const ModalComment = ({
                             placeholder={`Enter ${labelBody?.toLowerCase()}`}
                             value={valueBody}
                             onChange={(e) => onChangeBody(e.target.value)}
-                            isInvalid={!!validationErrors.body} // Устанавливаем, если есть ошибка
+                            isInvalid={!!validationErrors.body}
                         />
                         <Form.Control.Feedback type="invalid" style={{ display: validationErrors.body ? 'block' : 'none' }}>
                             {validationErrors.body}
@@ -116,10 +119,10 @@ const ModalComment = ({
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={onHide}>
-                    Cancel
+                    {t('Cancel')}
                 </Button>
                 <Button variant="primary" onClick={handleSubmit}>
-                    Save
+                    {t('Save')}
                 </Button>
             </Modal.Footer>
         </Modal>

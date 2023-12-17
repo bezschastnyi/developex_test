@@ -7,6 +7,7 @@ i18n
         resources: {
             en: {
                 translation: {
+                    //  comment
                     'Edit comment': 'Edit comment',
                     'NameComment': 'Name',
                     'Email':'Email',
@@ -16,7 +17,33 @@ i18n
                     'Comment Body':'Comment Body',
                     'Edit':'Edit',
                     'Delete':'Delete',
-                    'Answer':'Answer'
+                    'Answer':'Answer',
+
+
+                    //     modal
+                    'Cancel':'Cancel',
+                    'Save':'Save',
+                    'DeleteModal':"Delete",
+                    'Close':'Close',
+
+
+                    // posts
+                    'Edit post':'Edit',
+                    'Delete Post':'Delete',
+                    'Hide comments':'Hide comments',
+                    'Show comments':'Show comments',
+                    'Post Editing':'Post Editing',
+                    'Post Title':'Post Title',
+                    'Post Text':'Post Text',
+                    'Deleting a post':'Deleting a post',
+                    'Are you sure you want to delete this post?':'Are you sure you want to delete this post?',
+                    'New post':'New post',
+                    'New Post Title':'New Post Title',
+                    'New Post Text':'New Post Text',
+                    'Posts':'Posts',
+                    'Search...':'Search...',
+
+
 
                 },
             },

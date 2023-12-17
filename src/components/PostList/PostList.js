@@ -10,6 +10,7 @@ import ModalPost from "../Modal/ModalPost/ModalPost";
 import useApi from "../../hooks/useApi";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useTranslation} from "react-i18next";
 
 function PostList() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -18,6 +19,7 @@ function PostList() {
     const [showModal, setShowModal] = useState(false);
 
     const api = useApi()
+    const { t } = useTranslation()
 
     const dispatch = useDispatch();
 
@@ -103,29 +105,29 @@ function PostList() {
                 <input
                     type="text"
                     className="form-control"
-                    placeholder="Search..."
+                    placeholder={t('Search...')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <Button variant="primary" onClick={handleShowModal}>
-                    New post
+                    {t('New post')}
                 </Button>
             </div>
 
             <ModalPost
                 show={showModal}
                 onHide={() => setShowModal(false)}
-                title="New Post"
+                title={t('New Post')}
                 onSave={handleSavePost}
-                labelTitle="New Post Title"
-                labelBody="New Post Text"
+                labelTitle={t('New Post Title')}
+                labelBody={t('New Post Text')}
                 valueTitle={newPostTitle}
                 onChangeTitle={setNewPostTitle}
                 valueBody={newPostBody}
                 onChangeBody={setNewPostBody}
             />
 
-            <h2>Posts</h2>
+            <h2>{t('Posts')}</h2>
             <ul className="list-group">
                 {filteredPosts.map((post) => (
                     <li className="list-group-item">

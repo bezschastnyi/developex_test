@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
+import {useTranslation} from "react-i18next";
 
 const ModalComponent = ({
                             show,
@@ -29,6 +30,8 @@ const ModalComponent = ({
             .required('Required')
             .min(3, 'Min 3 characters'),
     });
+
+    const { t } = useTranslation()
 
     const handleValidation = async () => {
         try {
@@ -93,10 +96,10 @@ const ModalComponent = ({
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={onHide}>
-                    Close
+                    {t('Close')}
                 </Button>
                 <Button variant="primary" onClick={handleSubmit}>
-                    Save
+                    {t('Save')}
                 </Button>
             </Modal.Footer>
         </Modal>

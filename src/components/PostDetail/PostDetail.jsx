@@ -5,6 +5,7 @@ import ModalPost from "../Modal/ModalPost/ModalPost";
 import useApi from "../../hooks/useApi";
 import ModalConfirmation from "../Modal/ModalConfirmation/ModalConfirmation";
 import {toast} from "react-toastify";
+import {useTranslation} from "react-i18next";
 
 
 function PostDetail({searchTerm, item, comments, onDeletePost}) {
@@ -15,6 +16,7 @@ function PostDetail({searchTerm, item, comments, onDeletePost}) {
     const [editedPostBody, setEditedPostBody] = useState(item.body);
 
     const api = useApi()
+    const { t } = useTranslation()
 
     const toggleComments = () => {
         setShowComments(!showComments);
@@ -68,13 +70,13 @@ function PostDetail({searchTerm, item, comments, onDeletePost}) {
             </div>
             <div className="card-footer d-flex justify-content-between">
                 <button className="btn btn-primary mr-2" onClick={handleEdit}>
-                    Edit
+                    {t('Edit post')}
                 </button>
                 <button className="btn btn-danger mr-2" onClick={handleModalDelete}>
-                    Delete
+                    {t('Delete Post')}
                 </button>
                 <button className="btn btn-success" onClick={toggleComments}>
-                    {showComments ? 'Hide comments' : 'Show comments'}
+                    {showComments ? t('Hide comments') : t('Show comments')}
                 </button>
             </div>
             {showComments && (
@@ -86,10 +88,10 @@ function PostDetail({searchTerm, item, comments, onDeletePost}) {
             <ModalPost
                 show={showEditModal}
                 onHide={() => setShowEditModal(false)}
-                title="Post Editing"
+                title={t('Post Editing')}
                 onSave={handleEditPost}
-                labelTitle="Post Title"
-                labelBody="Post Text"
+                labelTitle={t('Post Title')}
+                labelBody={t('Post Text')}
                 valueTitle={editedPostTitle}
                 onChangeTitle={setEditedPostTitle}
                 valueBody={editedPostBody}
@@ -98,8 +100,8 @@ function PostDetail({searchTerm, item, comments, onDeletePost}) {
 
             {/* Delete confirmation */}
             <ModalConfirmation
-                title={'Deleting a post'}
-                body={'Are you sure you want to delete this post?'}
+                title={t('Deleting a post')}
+                body={t('Are you sure you want to delete this post?')}
                 show={showDeleteModal}
                 onCancel={() => setShowDeleteModal(false)}
                 onDelete={handleDelete}

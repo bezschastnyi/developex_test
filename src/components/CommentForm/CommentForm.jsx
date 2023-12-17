@@ -3,10 +3,20 @@ import { Card, Button } from 'react-bootstrap';
 import ModalComment from "../Modal/ModalComment/ModalComment";
 import useApi from "../../hooks/useApi";
 import ModalConfirmation from "../Modal/ModalConfirmation/ModalConfirmation";
-import {toast} from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import {message} from "../../constants/constants";
 
-const CommentForm = ({ comment, onDeleteComment }) => {
+function highlightSearchTerm(text, searchTerm) {
+    if (!searchTerm) {
+        return text;
+    }
+
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    return text.split(regex).map((part, index) => {
+        return regex.test(part) ? <span key={index} style={{ backgroundColor: 'yellow' }}>{part}</span> : part;
+    });
+}
+const CommentForm = ({ searchTerm, comment, onDeleteComment }) => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editedName, setEditedName] = useState(comment.name);
@@ -32,10 +42,7 @@ const CommentForm = ({ comment, onDeleteComment }) => {
 
     const handleDelete = () => {
         onDeleteComment();
-        toast.success('Complete', {
-            position: 'bottom-left',
-            autoClose: 1000,
-        })
+        message()
     };
 
     const handleSaveEdit = async (id) => {
@@ -52,10 +59,7 @@ const CommentForm = ({ comment, onDeleteComment }) => {
             setEditedBody(tempEditedBody);
             setEditedEmail(tempEditedEmail);
             setShowEditModal(false);
-            toast.success('Complete', {
-                position: 'bottom-left',
-                autoClose: 1000,
-            })
+            message()
         } catch (error) {
             console.error('An error occurred while editing the post:', error);
         }
@@ -63,17 +67,24 @@ const CommentForm = ({ comment, onDeleteComment }) => {
 
     return (
         <Card className="mb-2">
-            <Card.Body>
-                <Card.Title>{editedName}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">{editedEmail}</Card.Subtitle>
-                <Card.Text>{editedBody}</Card.Text>
-                <Button variant="primary" onClick={handleEdit}>
-                    {t('Edit')}
-                </Button>
-                <Button variant="danger" className="ml-2" onClick={handleDeleteModal}>
-                    {t('Delete')}
-                </Button>
-            </Card.Body>
+            <Card className="mb-2">
+                <Card.Body className="d-flex justify-content-between align-items-center">
+                    <div>
+                        <Card.Title>{highlightSearchTerm(editedName, searchTerm)}</Card.Title>
+                        <Card.Subtitle className="mb-2 text-muted">{highlightSearchTerm(editedEmail, searchTerm)}</Card.Subtitle>
+                        <Card.Text>{highlightSearchTerm(editedBody, searchTerm)}</Card.Text>
+                    </div>
+                    <div className="d-flex">
+                        <Button style={{ backgroundColor: '#008080', borderColor: '#008080' }} variant="primary" onClick={handleEdit}>
+                            {t('Edit')}
+                        </Button>
+                        <Button style={{ backgroundColor: '#800080', borderColor: '#800080' }} variant="danger" className="ml-2" onClick={handleDeleteModal}>
+                            {t('Delete')}
+                        </Button>
+                    </div>
+                </Card.Body>
+            </Card>
+
 
             {/* Edit comment */}
             <ModalComment

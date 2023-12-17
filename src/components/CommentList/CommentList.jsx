@@ -5,8 +5,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateComments} from "../../redux/actions/updateComments";
 import ModalComment from "../Modal/ModalComment/ModalComment";
 import useApi from "../../hooks/useApi";
-import {toast} from "react-toastify";
 import {useTranslation} from "react-i18next";
+import {message} from "../../constants/constants";
+
 function CommentList(props) {
     const dispatch = useDispatch()
     const [showForm, setShowForm] = useState(false);
@@ -51,10 +52,7 @@ function CommentList(props) {
             const commentNew = [newComment, ...fillComments];
             dispatch(updateComments(commentNew));
             handleCloseForm()
-            toast.success('Complete', {
-                position: 'bottom-left',
-                autoClose: 1000,
-            })
+            message()
         } catch (error) {
             console.error('Error saving a new post:', error);
         }
@@ -62,15 +60,14 @@ function CommentList(props) {
 
     const filteredComments = fillComments.filter(comment => comment.postId === props.postId);
 
-
-
     return (
         <div>
             <h3>Comments</h3>
-            <Button variant="primary" onClick={handleShowForm}>{t('Answer')}</Button>
+            <Button style={{ backgroundColor: '#800020', borderColor: '#800020' }} variant="primary" onClick={handleShowForm}>{t('Answer')}</Button>
             <div>
                 {filteredComments.map((comment) => (
-                    <CommentForm key={comment.body}
+                    <CommentForm searchTerm={props.searchTerm}
+                      key={comment.body}
                                  comment={comment}
                                  body={comment.body}
                                  name={comment.name}

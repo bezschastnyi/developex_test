@@ -5,6 +5,49 @@ i18n
     .use(initReactI18next)
     .init({
         resources: {
+            ukr: {
+                translation: {
+                    //  comment
+                    'Select Language': 'Оберіть мову',
+                    'Edit comment': 'Редагування коментаря',
+                    'NameComment': "Ім'я",
+                    'Email':'Email',
+                    'Comment text':'Текст коментаря',
+                    'Deleting a comment':'Відалення комментаря',
+                    'Are you sure you want to delete this comment?':'Ви впевнені, що хочете видалити цей коментар?',
+                    'Comment Body':'Тіло коментаря',
+                    'Edit':'Редагування',
+                    'Delete':'Видалити',
+                    'Answer':'Відповісти',
+
+
+                    //     modal
+                    'Cancel':'Відміна',
+                    'Save':'Зберегти',
+                    'DeleteModal':"Видалити",
+                    'Close':'Закрити',
+
+
+                    // posts
+                    'Edit post':'Редагування посту',
+                    'Delete Post':'Видалити',
+                    'Hide comments':'Прибрати кометарі',
+                    'Show comments':'Показати коментарі',
+                    'Post Editing':'Редагування посту',
+                    'Post Title':'Заголовок посту',
+                    'Post Text':'Тескт посту',
+                    'Deleting a post':'Видалення посту',
+                    'Are you sure you want to delete this post?':'Ви впевненні, що хочети видалити пост??',
+                    'New post':'Новий пост',
+                    'New Post Title':'Зоголовок нового посту',
+                    'New Post Text':'Тескт нового посту',
+                    'Posts':'Пости',
+                    'Search...':'Пошук...',
+
+
+
+                },
+            },
             en: {
                 translation: {
                     //  comment

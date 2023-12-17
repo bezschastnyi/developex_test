@@ -5,8 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import './Localization/i18n';
 
 function App() {
-
-
     return (
         <>
             <PostList />
